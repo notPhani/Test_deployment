@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Array Generator</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; }
+        #messages { height: 400px; overflow-y: scroll; border: 1px solid #ddd; padding: 10px; }
+        button { padding: 10px 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>Real-time Array Generator</h1>
+    <button id="generateBtn">Generate New Array</button>
+    <div id="messages"></div>
+
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const ws = new WebSocket(`ws://${window.location.host}/ws`);
+        
+        ws.onmessage = (event) => {
+            const msg = document.createElement('div');
+            msg.textContent = event.data;
+            messagesDiv.prepend(msg);
+            messagesDiv.scrollTop = 0;
+        };
+
+        document.getElementById('generateBtn').addEventListener('click', () => {
+            ws.send("generate");
+        });
+    </script>
+</body>
+</html>
